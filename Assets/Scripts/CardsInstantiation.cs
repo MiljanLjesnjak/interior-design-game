@@ -1,0 +1,88 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class CardsInstantiation : MonoBehaviour
+{
+    [SerializeField] GameObject card_prefab;
+    [SerializeField] GameObject objects_parent, cards_parent;
+
+    [SerializeField] Camera cam;
+    public Transform photo_shoot;
+    [SerializeField] GameObject light;
+
+
+    void Awake()
+    {
+        RenderTexture render_tex;
+        Texture2D ss;
+        Vector3 init_pos;
+        Quaternion init_rot;
+        int cell_count;
+        float cell_x, cell_y;
+
+        foreach(Transform obj in objects_parent.transform)
+        {
+            obj.gameObject.SetActive(true);
+
+            init_pos = obj.position;
+            init_rot = obj.rotation;
+
+            cell_count = 0;
+            cell_x = 0;
+            cell_y = 0;
+            foreach(Transform child in obj.transform)
+            {
+                if (child.tag != "ObjectCell")
+                    continue;
+
+                cell_x += child.localPosition.x;
+                cell_y += child.localPosition.y;
+                cell_count++;
+            }
+
+            obj.position = photo_shoot.position + new Vector3(-cell_x / cell_count, -cell_y / cell_count, 0);
+            obj.rotation = Quaternion.Euler(0, 0, 0);
+
+            //Render to the render texture
+            render_tex = new RenderTexture(512, 512, 8);
+            cam.targetTexture = render_tex;
+            cam.Render();
+
+            //Convert render tex to 2D texture
+            ss = new Texture2D(512, 512, TextureFormat.ARGB32, false);
+
+            RenderTexture.active = render_tex;
+            ss.ReadPixels(new Rect(0, 0, render_tex.width, render_tex.height), 0, 0);
+            ss.Apply();
+
+
+            //Apply 2D tex
+            GameObject card = Instantiate(card_prefab, cards_parent.transform);
+            card.transform.GetChild(2).GetComponent<RawImage>().texture = ss;
+
+
+            //Set card text and name
+            card.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = obj.name;
+            card.name = obj.name;
+
+            render_tex = null;
+            ss = null;
+            cam.targetTexture = null;
+            RenderTexture.active = null;
+
+            obj.position = init_pos;
+            obj.rotation = init_rot;
+
+            obj.gameObject.SetActive(false);
+        }
+
+        cam.gameObject.SetActive(false);
+        light.SetActive(false);
+
+    }
+
+
+}
