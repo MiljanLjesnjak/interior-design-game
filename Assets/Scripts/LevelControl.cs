@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[Serializable]
 public class LevelObject
 {
     public string name;
@@ -34,8 +36,7 @@ public class LevelControl : MonoBehaviour
 
     private void Awake()
     {
-        room_animator = room.GetComponent<Animator>();
-        //room_animator = Camera.main.gameObject.GetComponent<Animator>();
+        room_animator = Camera.main.gameObject.GetComponent<Animator>();
 
         Application.targetFrameRate = 60;
         //Screen.SetResolution(960, 1973, true);   

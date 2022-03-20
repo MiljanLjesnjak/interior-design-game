@@ -96,11 +96,7 @@ public class Controller : MonoBehaviour
         if (selected_object == null)
             return;
 
-        //Move to raycast hit point
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-
+        //Rotate wall objects while moving
         if (Types.Equals(selected_object.GetComponent<ObjectDrag>().GetType(), typeof(WallDrag)))
         {
             int min = 0;
@@ -114,15 +110,13 @@ public class Controller : MonoBehaviour
             selected_object.transform.Rotate(90, 90, 90);
         }
 
+        //Move to raycast hit point
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out hit, 1000, placementRaycast))
         {
-
-            if (Types.Equals(selected_object.GetComponent<ObjectDrag>().GetType(), typeof(FurnitureDrag)))
-                selected_object.transform.position = new Vector3(hit.point.x - object_drag_offset.x, 0, hit.point.z - object_drag_offset.z);
-            else
-                selected_object.transform.position = hit.point - object_drag_offset;
-
+            selected_object.transform.position = hit.point - object_drag_offset;
         }
 
         else
@@ -132,7 +126,6 @@ public class Controller : MonoBehaviour
         }
 
         //Keep entire object in grid while moving
-
         foreach (Transform child in selected_object.transform)
         {
             if (child.tag != "ObjectCell")
@@ -174,14 +167,14 @@ public class Controller : MonoBehaviour
                 offset.z = cell_pos.z + horizontal_bound;
             }
 
-            if (cell_pos.y < 0.5f)
+            if (cell_pos.y - 40f < 0.5f)
             {
-                offset.y = cell_pos.y - 0.5f;
+                offset.y = cell_pos.y - 40f - 0.5f;
             }
 
-            if (cell_pos.y > Grid.wall_grid_bound)
+            if (cell_pos.y - 40f > Grid.wall_grid_bound)
             {
-                offset.y = cell_pos.y - Grid.wall_grid_bound;
+                offset.y = cell_pos.y - 40f - Grid.wall_grid_bound;
             }
 
 
@@ -300,7 +293,7 @@ public class Controller : MonoBehaviour
     {
         //GameObject prefab = prefabs.Find(selected_card.name).gameObject;
         GameObject prefab = null;
-        foreach(Transform p in prefabs)
+        foreach (Transform p in prefabs)
         {
             if (p.name == selected_card.name && !p.gameObject.activeSelf)
                 prefab = p.gameObject;

@@ -14,7 +14,7 @@ public class CardsInstantiation : MonoBehaviour
     [SerializeField] GameObject light;
 
 
-    void Awake()
+    void Start()
     {
         RenderTexture render_tex;
         Texture2D ss;
