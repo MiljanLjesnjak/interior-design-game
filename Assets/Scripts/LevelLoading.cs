@@ -11,7 +11,7 @@ public class LevelLoading : MonoBehaviour
     {
   
         string[] all_levels = File.ReadAllLines(Application.dataPath + "/levels.txt");
-        int level_index = 0;
+        int level_index = PlayerPrefs.GetInt("level_index", 0);
 
         string level_parsed = all_levels[level_index];
 
@@ -40,19 +40,31 @@ public class LevelLoading : MonoBehaviour
                 float.Parse(rot_coords[3]));
 
 
-            GameObject game_obj_preview = (GameObject)Instantiate(Resources.Load(name));
-
-            game_obj_preview.transform.parent = prefabs_preview;
-            game_obj_preview.name = name;
-            game_obj_preview.transform.position = pos;
-            game_obj_preview.transform.rotation = rot;
-
             GameObject game_obj_play = (GameObject)Instantiate(Resources.Load(name));
             game_obj_play.transform.parent = prefabs_play;
             game_obj_play.name = name;
             game_obj_play.transform.position = Vector3.one * 20f;
             game_obj_play.transform.rotation = Quaternion.Euler(0, 0, 0);
             game_obj_play.SetActive(false);
+
+
+
+            GameObject game_obj_preview = (GameObject)Instantiate(Resources.Load(name));
+            game_obj_preview.transform.parent = prefabs_preview;
+            game_obj_preview.name = name;
+            game_obj_preview.transform.position = pos;
+            game_obj_preview.transform.rotation = rot;
+
+            foreach (Collider col in game_obj_preview.GetComponents(typeof(Collider)))
+                col.enabled = false;
+
+            if (game_obj_preview.GetComponent<FurnitureDrag>() != null)
+                game_obj_preview.GetComponent<FurnitureDrag>().enabled = false;
+
+            if (game_obj_preview.GetComponent<WallDrag>() != null)
+                game_obj_preview.GetComponent<WallDrag>().enabled = false;
+
+            game_obj_preview.GetComponent<Animator>().enabled = false;
         }
 
 

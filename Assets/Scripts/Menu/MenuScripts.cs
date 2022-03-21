@@ -10,9 +10,12 @@ public class MenuScripts : MonoBehaviour
         SceneManager.LoadScene(index);
     }
 
-    public void NextScene()
+    public void NextLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        int level_index = PlayerPrefs.GetInt("level_index", 0);
+        PlayerPrefs.SetInt("level_index", level_index + 1);
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void PlayButtonPush()

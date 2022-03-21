@@ -18,7 +18,7 @@ public class LevelSaving : MonoBehaviour
 
         foreach (Transform obj in GameObject.Find("Prefabs Play").transform)
         {
-            parsed_data += obj.name + "/" + obj.position.ToString("F3") + "/" + obj.rotation.ToString("F3");
+            parsed_data += obj.name + "/" + (obj.position + Vector3.down * 40f).ToString("F3") + "/" + obj.rotation.ToString("F3");
             parsed_data += "\\";
         }
 
