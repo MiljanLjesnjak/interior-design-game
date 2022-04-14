@@ -9,15 +9,16 @@ public class LevelLoading : MonoBehaviour
 
     private void Awake()
     {
-  
-        string[] all_levels = File.ReadAllLines(Application.dataPath + "/levels.txt");
+        string[] all_levels = ((TextAsset)Resources.Load("_levels")).text.Split('\n');
+
+
         int level_index = PlayerPrefs.GetInt("level_index", 0);
 
         string level_parsed = all_levels[level_index];
-
+        level_parsed = level_parsed.Substring(0, level_parsed.Length - 1);
         string[] level_objects = level_parsed.Split('\\');
 
-        foreach(string obj in level_objects)
+        foreach (string obj in level_objects)
         {
             //Name
             string name = obj.Split('/')[0];
@@ -26,8 +27,8 @@ public class LevelLoading : MonoBehaviour
             string pos_string = obj.Split('/')[1];
             string[] pos_coords = pos_string.Substring(1, pos_string.Length - 2).Split(',');
             Vector3 pos = new Vector3(
-                float.Parse(pos_coords[0]), 
-                float.Parse(pos_coords[1]), 
+                float.Parse(pos_coords[0]),
+                float.Parse(pos_coords[1]),
                 float.Parse(pos_coords[2]));
 
             //Rotation

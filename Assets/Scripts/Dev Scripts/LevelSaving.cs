@@ -25,7 +25,8 @@ public class LevelSaving : MonoBehaviour
         parsed_data = parsed_data.Substring(0, parsed_data.Length - 1);
         parsed_data += "\n";
 
-        File.AppendAllText(Application.dataPath + "/levels.txt", parsed_data);
+
+        File.AppendAllText("Assets/Resources/_levels.txt", parsed_data);
     }
 
 }
