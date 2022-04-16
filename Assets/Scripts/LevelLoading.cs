@@ -9,6 +9,7 @@ public class LevelLoading : MonoBehaviour
 
     private void Awake()
     {
+
         string[] all_levels = ((TextAsset)Resources.Load("_levels")).text.Split('\n');
 
 
@@ -40,8 +41,7 @@ public class LevelLoading : MonoBehaviour
                 float.Parse(rot_coords[2]),
                 float.Parse(rot_coords[3]));
 
-
-            GameObject game_obj_play = (GameObject)Instantiate(Resources.Load(name));
+            GameObject game_obj_play = (GameObject)Instantiate(Resources.Load("Prefabs/" + name));
             game_obj_play.transform.parent = prefabs_play;
             game_obj_play.name = name;
             game_obj_play.transform.position = Vector3.one * 20f;
@@ -50,7 +50,7 @@ public class LevelLoading : MonoBehaviour
 
 
 
-            GameObject game_obj_preview = (GameObject)Instantiate(Resources.Load(name));
+            GameObject game_obj_preview = (GameObject)Instantiate(Resources.Load("Prefabs/" + name));
             game_obj_preview.transform.parent = prefabs_preview;
             game_obj_preview.name = name;
             game_obj_preview.transform.position = pos;
