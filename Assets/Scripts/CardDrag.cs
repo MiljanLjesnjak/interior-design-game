@@ -31,9 +31,9 @@ public class CardDrag : MonoBehaviour, IPointerDownHandler
         StartCoroutine(LerpScale(1f, 1.15f));
     }
 
+
     public void ReturnCard()
     {
-
         if (Controller.selected_card == null)
             return;
 

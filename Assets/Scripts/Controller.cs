@@ -80,13 +80,6 @@ public class Controller : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            if (selected_object)
-            {
-                selected_object.GetComponent<ObjectDrag>().RotateObject();
-            }
-        }
     }
 
 
@@ -193,6 +186,15 @@ public class Controller : MonoBehaviour
 
     void ObjectToCard()
     {
+        if (level_editor)
+        {
+            selected_object.GetComponent<Animator>().Play("ObjectPickup");
+            Destroy(selected_object);
+            selected_object = null;
+
+            return;
+        }
+
         foreach (Transform card in active_card)
         {
             if (card.name == selected_object.name)
@@ -289,6 +291,8 @@ public class Controller : MonoBehaviour
         }
     }
 
+    [SerializeField]
+    bool level_editor = false;
     void CardToObject(RaycastHit hit)
     {
         //GameObject prefab = prefabs.Find(selected_card.name).gameObject;
@@ -296,10 +300,24 @@ public class Controller : MonoBehaviour
         foreach (Transform p in prefabs)
         {
             if (p.name == selected_card.name && !p.gameObject.activeSelf)
-                prefab = p.gameObject;
+            {
+                if (!level_editor)
+                    prefab = p.gameObject;
+                else
+                {
+                    prefab = Instantiate(p.gameObject);
+                    prefab.name = p.gameObject.name;
+                    prefab.transform.parent = GameObject.Find("Placed Objects").transform;
+                }
+            }
         }
 
-        selected_card.GetComponent<Animator>().Play("CloseAnim");
+
+        if (!level_editor)
+            selected_card.GetComponent<Animator>().Play("CloseAnim");
+        else
+            DeselectCard();
+
         //selected_card.SetActive(false);
 
         prefab.SetActive(true);
@@ -324,6 +342,7 @@ public class Controller : MonoBehaviour
         {
             padding_card.GetComponent<RectTransform>().sizeDelta = Vector2.Lerp(startPosition, end, time / duration);
             time += Time.deltaTime;
+
             yield return null;
         }
         transform.position = end;

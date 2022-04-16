@@ -16,7 +16,7 @@ public class LevelSaving : MonoBehaviour
     {
         string parsed_data = "";
 
-        foreach (Transform obj in GameObject.Find("Prefabs Play").transform)
+        foreach (Transform obj in GameObject.Find("Placed Objects").transform)
         {
             parsed_data += obj.name + "/" + (obj.position + Vector3.down * 40f).ToString("F3") + "/" + obj.rotation.ToString("F3");
             parsed_data += "\\";
@@ -27,6 +27,8 @@ public class LevelSaving : MonoBehaviour
 
 
         File.AppendAllText("Assets/Resources/_levels.txt", parsed_data);
+
+        GameObject.Find("UI Scripts").GetComponent<MenuScripts>().RestartLevel();
     }
 
 }

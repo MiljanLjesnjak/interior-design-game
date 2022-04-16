@@ -64,7 +64,6 @@ public class FurnitureDrag : ObjectDrag
     }
 
 
-    [SerializeField] GameObject sphere, sphere2, sphere_p;
     public override void PlaceObject()
     {
         if (Controller.selected_object == null)
