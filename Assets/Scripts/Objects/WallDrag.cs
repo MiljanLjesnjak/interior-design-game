@@ -60,10 +60,11 @@ public class WallDrag : ObjectDrag
         Transform closest_cell = wall_grid.GetChild(0);
         Transform root_cell = transform.GetChild(0);
 
+        //Get all available cells
         List<Transform> available_cells = new List<Transform>();
         foreach (Transform cell in wall_grid)
         {
-            if (IsInGrid2(cell))
+            if (IsInGrid(cell))
             {
                 available_cells.Add(cell);
             }
@@ -71,7 +72,7 @@ public class WallDrag : ObjectDrag
 
         closest_cell = available_cells[0];
 
-
+        //Find closest available cell
         foreach (Transform cell in available_cells)
         {
             if (Vector3.Magnitude(root_cell.position - cell.position) < Vector3.Magnitude(root_cell.position - closest_cell.position))
@@ -85,24 +86,8 @@ public class WallDrag : ObjectDrag
 
         StartCoroutine(LerpPosition(closest_cell.position)); 
     }
-
-
-    bool IsCellInGrid(Transform cell)
-    {
-        Transform wall_grid = GameObject.Find("Scripts").GetComponent<Grid>().wall_grid.transform;
-
-        foreach (Transform grid_cell in wall_grid)
-        {
-            if (Vector3.SqrMagnitude(grid_cell.position - cell.position) < 0.1f)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    bool IsInGrid2(Transform cell)
+ 
+    bool IsInGrid(Transform cell)
     {
         Transform root_cell = transform.GetChild(0);
 
@@ -151,91 +136,21 @@ public class WallDrag : ObjectDrag
         return true;
     }
 
-    //---
-    bool IsInGrid(Vector3 offset)
+    bool IsCellInGrid(Transform cell)
     {
-        foreach (Transform child in transform)
+        Transform wall_grid = GameObject.Find("Scripts").GetComponent<Grid>().wall_grid.transform;
+
+        foreach (Transform grid_cell in wall_grid)
         {
-            if (child.tag != "ObjectCell")
-                continue;
-
-            if (Physics.OverlapSphere(child.transform.position + offset, 0.25f, wallGridMask).Length == 0)
+            if (Vector3.SqrMagnitude(grid_cell.position - cell.position) < 0.1f)
             {
-                return false;
-            }
-
-            foreach (Collider col in Physics.OverlapSphere(child.transform.position + offset, 0.25f, objectCellMask))
-            {
-                if (col.transform.parent != transform)
-                {
-                    return false;
-                }
+                return true;
             }
         }
 
-
-        return true;
+        return false;
     }
 
-
-    List<Vector3> spaces;
-    List<Vector3> visited;
-    bool found = false;
-    public override void TranslateIntoGrid()
-    {
-        spaces = new List<Vector3>();
-        visited = new List<Vector3>();
-        found = false;
-
-        TranslateBacktrack(visited, transform.position);
-
-
-        int min = 0;
-        for (int i = 1; i < spaces.Count; i++)
-        {
-            if (Vector3.Magnitude(transform.position - spaces[i]) < Vector3.Magnitude(transform.position - spaces[min]))
-                min = i;
-        }
-
-        StartCoroutine(LerpPosition(spaces[min]));
-    }
-
-    //Assign indice to grid squares - use that instead of overlapping sphere and shi
-
-
-    void TranslateBacktrack(List<Vector3> visited, Vector3 pos)
-    {
-        if (visited.Contains(pos))
-            return;
-
-        visited.Add(pos);
-
-
-        if (IsInGrid(pos - transform.position))
-        {
-            spaces.Add(pos);
-            return;
-        }
-
-        if (Mathf.Abs((pos + Vector3.forward).z) <= 4.5f && !visited.Contains(pos + Vector3.forward) && spaces.Count < 5)
-            TranslateBacktrack(visited, pos + Vector3.forward);
-
-        if (Mathf.Abs((pos + Vector3.back).z) <= 4.5f   && !visited.Contains(pos + Vector3.back) && spaces.Count < 5)
-            TranslateBacktrack(visited, pos + Vector3.back);
-
-        if (Mathf.Abs((pos + Vector3.right).x) <= 4.5f   && !visited.Contains(pos + Vector3.right) && spaces.Count < 5)
-            TranslateBacktrack(visited, pos + Vector3.right);
-
-        if (Mathf.Abs((pos + Vector3.left).x) <= 4.5f   && !visited.Contains(pos + Vector3.left) && spaces.Count < 5)
-            TranslateBacktrack(visited, pos + Vector3.left);
-
-        if (Mathf.Abs((pos + Vector3.up).y) <= 4.5f   && !visited.Contains(pos + Vector3.up) && spaces.Count < 5)
-            TranslateBacktrack(visited, pos + Vector3.up);
-
-        if (Mathf.Abs((pos + Vector3.down).y) <= 4.5f   && !visited.Contains(pos + Vector3.down) && spaces.Count < 5)
-            TranslateBacktrack(visited, pos + Vector3.down);
-
-    }
 
     IEnumerator LerpPosition(Vector3 endPos)
     {

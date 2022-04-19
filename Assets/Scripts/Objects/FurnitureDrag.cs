@@ -60,7 +60,6 @@ public class FurnitureDrag : ObjectDrag
     public override void RotateObject()
     {
         transform.Rotate(0, -90, 0);
-        TranslateIntoGrid();
     }
 
 
@@ -76,6 +75,7 @@ public class FurnitureDrag : ObjectDrag
         Transform closest_cell = furniture_grid.GetChild(0);
         Transform root_cell = transform.GetChild(0);    //Root cell of the object, not grid
 
+        //Get all legal cells
         List<Transform> available_cells = new List<Transform>();
         foreach (Transform cell in furniture_grid)
         {
@@ -85,6 +85,7 @@ public class FurnitureDrag : ObjectDrag
             }
         }
 
+        //Find closest out of all legal cells
         closest_cell = available_cells[0];
 
         foreach (Transform cell in available_cells)
@@ -95,6 +96,7 @@ public class FurnitureDrag : ObjectDrag
             }
         }
 
+        //Set pos
         StartCoroutine(LerpPosition(closest_cell.position));
     }
 
@@ -129,8 +131,6 @@ public class FurnitureDrag : ObjectDrag
             if (child.tag != "ObjectCell")
                 continue;
 
-            //Instantiate(sphere, child.position, Quaternion.identity, sphere_p.transform);
-
             foreach (Collider col in Physics.OverlapSphere(child.position, 0.25f, cellMask))
             {
                 if (col.transform.parent != transform)
@@ -143,98 +143,6 @@ public class FurnitureDrag : ObjectDrag
 
         transform.position = init_pos;
         return true;
-    }
-
-
-    //---
-    bool IsInGrid(Vector3 offset)
-    {
-        foreach (Transform child in transform)
-        {
-            if (child.tag != "ObjectCell")
-                continue;
-
-            Vector3 pos = child.transform.position + offset;
-
-            if (Mathf.Abs(pos.x) > Grid.furniture_grid_bound + 0.01f)
-            {
-                return false;
-            }
-
-            if (Mathf.Abs(pos.z) > Grid.furniture_grid_bound + 0.01f)
-            {
-                return false;
-            }
-
-        }
-
-        //Overlap with other objects
-        foreach (Transform child in transform)
-        {
-            if (child.tag != "ObjectCell")
-                continue;
-
-            foreach (Collider col in Physics.OverlapSphere(child.transform.position + offset, 0.25f, cellMask))
-            {
-                if (col.transform.parent != transform)
-                {
-                    return false;
-                }
-            }
-        }
-
-
-        return true;
-    }
-
-    List<Vector3> visited;
-    bool found;
-    List<Vector3> spaces;
-    public override void TranslateIntoGrid()
-    {
-        visited = new List<Vector3>();
-        found = false;
-        spaces = new List<Vector3>();
-
-        TranslateBacktrack(visited, transform.position);
-
-        int min = 0;
-        for (int i = 1; i < spaces.Count; i++)
-        {
-            if (Vector3.Magnitude(transform.position - spaces[i]) < Vector3.Magnitude(transform.position - spaces[min]))
-                min = i;
-        }
-
-        //transform.position = spaces[min];
-        StartCoroutine(LerpPosition(spaces[min]));
-
-    }
-
-    void TranslateBacktrack(List<Vector3> visited, Vector3 pos)
-    {
-        if (visited.Contains(pos))
-            return;
-
-        visited.Add(pos);
-
-        if (IsInGrid(pos - transform.position) && !found)
-        {
-            spaces.Add(pos);
-            return;
-        }
-
-        if (Mathf.Abs((pos + Vector3.forward).z) <= 4.5f && !found)
-            TranslateBacktrack(visited, pos + Vector3.forward);
-
-        if (Mathf.Abs((pos + Vector3.back).z) <= 4.5f && !found)
-            TranslateBacktrack(visited, pos + Vector3.back);
-
-        if (Mathf.Abs((pos + Vector3.right).x) <= 4.5f && !found)
-            TranslateBacktrack(visited, pos + Vector3.right);
-
-        if (Mathf.Abs((pos + Vector3.left).x) <= 4.5f && !found)
-            TranslateBacktrack(visited, pos + Vector3.left);
-
     }
 
 

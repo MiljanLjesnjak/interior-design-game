@@ -10,80 +10,56 @@ using UnityEngine.UI;
 
 public class Controller : MonoBehaviour
 {
-    LayerMask placementRaycast, wallRaycastMask;
+    LayerMask placementRaycast;
 
+    Transform wall_grid;
+
+    public bool level_editor = false;
+
+    [Header("Placeables")]
+    public Transform placeables;
     public static GameObject selected_object = null;
     public static Vector3 object_drag_offset;
-    [HideInInspector]
-    public GameObject selected_cell;
 
-    [SerializeField] Transform cards, active_card;
+    [Header("Cards")]
+    public Transform cards, active_card;
     public static GameObject selected_card = null;
     public static Vector3 init_card_pos, begin_drag_pos;
 
-    [SerializeField] GameObject padding_card;   //Empty card
-    [SerializeField] ScrollRect scroll;
+    [Header("Padding and scroll")]
+    public GameObject padding_card;   //Empty card
+    public ScrollRect scroll;
     public float scroll_speed = 5f;
 
-    [SerializeField] Transform prefabs;
+    
 
     private void Start()
     {
         placementRaycast = 1 << LayerMask.NameToLayer("Placement Raycast");
-        wallRaycastMask = 1 << LayerMask.NameToLayer("Wall Placement Raycast");
 
         wall_grid = GetComponent<Grid>().wall_grid.transform;
     }
 
-    public void SelectCard(GameObject card)
-    {
-        selected_card = card;
-
-        padding_card.transform.SetSiblingIndex(selected_card.transform.GetSiblingIndex());
-        padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(125f, 185);
-
-        //selected_card.transform.parent = active_card;
-        selected_card.transform.SetParent(active_card);
-
-        scroll.enabled = false;
-    }
-
-    public void DeselectCard()
-    {
-        //selected_card.transform.parent = cards;
-        selected_card.transform.SetParent(cards);
-
-        selected_card.transform.SetSiblingIndex(padding_card.transform.GetSiblingIndex());
-        padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(-50, 185);
-
-        selected_card.GetComponent<CardDrag>().ReturnCard();
-    }
-
+    //Input
     private void Update()
     {
         MoveObject();
         MoveCard();
 
-
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             if (selected_object)
-            {
                 selected_object.GetComponent<ObjectDrag>().PlaceObject();
-            }
 
-            scroll.enabled = true;
+
             if (selected_card)
-            {
-                DeselectCard();
-            }
+                selected_card.GetComponent<CardDrag>().DeselectCard();
 
         }
 
     }
 
-
-    Transform wall_grid;
+    //Placeable is selected
     void MoveObject()
     {
         if (selected_object == null)
@@ -214,8 +190,10 @@ public class Controller : MonoBehaviour
 
         selected_object = null;
     }
+    //---
 
 
+    //Card is selected
     void MoveCard()
     {
         if (selected_card == null)
@@ -291,23 +269,21 @@ public class Controller : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    bool level_editor = false;
     void CardToObject(RaycastHit hit)
     {
         //GameObject prefab = prefabs.Find(selected_card.name).gameObject;
-        GameObject prefab = null;
-        foreach (Transform p in prefabs)
+        GameObject placeable = null;
+        foreach (Transform p in placeables)
         {
             if (p.name == selected_card.name && !p.gameObject.activeSelf)
             {
                 if (!level_editor)
-                    prefab = p.gameObject;
+                    placeable = p.gameObject;
                 else
                 {
-                    prefab = Instantiate(p.gameObject);
-                    prefab.name = p.gameObject.name;
-                    prefab.transform.parent = GameObject.Find("Placed Objects").transform;
+                    placeable = Instantiate(p.gameObject);
+                    placeable.name = p.gameObject.name;
+                    placeable.transform.parent = GameObject.Find("Placed Objects").transform;
                 }
             }
         }
@@ -316,15 +292,15 @@ public class Controller : MonoBehaviour
         if (!level_editor)
             selected_card.GetComponent<Animator>().Play("CloseAnim");
         else
-            DeselectCard();
+            selected_card.GetComponent<CardDrag>().DeselectCard();
 
         //selected_card.SetActive(false);
 
-        prefab.SetActive(true);
+        placeable.SetActive(true);
 
-        prefab.transform.position = hit.point;
+        placeable.transform.position = hit.point;
 
-        selected_object = prefab;
+        selected_object = placeable;
 
         selected_object.SetActive(true);
 
@@ -332,20 +308,20 @@ public class Controller : MonoBehaviour
 
         selected_card = null;
     }
+    //---
 
 
-    IEnumerator LerpVector2(Vector2 end, float duration)
+    public void AddCardPadding()
     {
-        float time = 0;
-        Vector2 startPosition = padding_card.GetComponent<RectTransform>().sizeDelta;
-        while (time < duration)
-        {
-            padding_card.GetComponent<RectTransform>().sizeDelta = Vector2.Lerp(startPosition, end, time / duration);
-            time += Time.deltaTime;
-
-            yield return null;
-        }
-        transform.position = end;
+        padding_card.transform.SetSiblingIndex(selected_card.transform.GetSiblingIndex());
+        padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(125f, 185);
     }
+
+    public void RemoveCardPadding()
+    {
+        selected_card.transform.SetSiblingIndex(padding_card.transform.GetSiblingIndex());
+        padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(-50, 185);
+    }
+
 
 }

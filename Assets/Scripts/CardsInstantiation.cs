@@ -13,7 +13,7 @@ public class CardsInstantiation : MonoBehaviour
     public Transform photo_shoot;
     [SerializeField] GameObject light;
 
-
+    
     void Start()
     {
         RenderTexture render_tex;

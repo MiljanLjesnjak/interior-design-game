@@ -750,14 +750,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 081fbd5ad1ac9124fb5304d2dfdf4696, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selected_cell: {fileID: 0}
+  level_editor: 1
+  placeables: {fileID: 948259350}
   cards: {fileID: 8072201486337746924}
   active_card: {fileID: 8072201486256271681}
   padding_card: {fileID: 8072201485310666558}
   scroll: {fileID: 8072201486023285203}
   scroll_speed: 0.5
-  prefabs: {fileID: 948259350}
-  level_editor: 1
 --- !u!114 &423517973
 MonoBehaviour:
   m_ObjectHideFlags: 0
