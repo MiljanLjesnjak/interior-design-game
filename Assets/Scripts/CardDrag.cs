@@ -24,7 +24,7 @@ public class CardDrag : MonoBehaviour, IPointerDownHandler
 
         GameObject.Find("Scripts").GetComponent<Controller>().AddCardPadding();
 
-        card.transform.SetParent(controller.active_card);
+        card.transform.SetParent(controller.active_parent);
 
         controller.scroll.enabled = false;
 

@@ -10,6 +10,7 @@ TagManager:
   - Furniture Cell
   - Wall Cell
   - Ignore Rotation
+  - Category
   layers:
   - Default
   - TransparentFX

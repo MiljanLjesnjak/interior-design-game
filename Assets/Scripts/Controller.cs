@@ -22,7 +22,7 @@ public class Controller : MonoBehaviour
     public static Vector3 object_drag_offset;
 
     [Header("Cards")]
-    public Transform cards, active_card;
+    public Transform cards, active_parent;
     public static GameObject selected_card = null;
     public static Vector3 init_card_pos, begin_drag_pos;
 
@@ -31,7 +31,7 @@ public class Controller : MonoBehaviour
     public ScrollRect scroll;
     public float scroll_speed = 5f;
 
-    
+
 
     private void Start()
     {
@@ -171,7 +171,7 @@ public class Controller : MonoBehaviour
             return;
         }
 
-        foreach (Transform card in active_card)
+        foreach (Transform card in active_parent)
         {
             if (card.name == selected_object.name)
             {
@@ -223,7 +223,7 @@ public class Controller : MonoBehaviour
 
 
         //Set padding card SiblingIndex (insert padding in correct place)
-        padding_card.transform.SetParent(active_card);
+        padding_card.transform.SetParent(active_parent);
 
         if (cards.childCount == 0 || selected_card.transform.position.x < cards.GetChild(0).position.x)
         {

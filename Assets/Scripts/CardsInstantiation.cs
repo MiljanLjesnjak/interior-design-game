@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +14,7 @@ public class CardsInstantiation : MonoBehaviour
     public Transform photo_shoot;
     [SerializeField] GameObject light;
 
-    
+
     void Start()
     {
         RenderTexture render_tex;
@@ -23,8 +24,17 @@ public class CardsInstantiation : MonoBehaviour
         int cell_count;
         float cell_x, cell_y;
 
-        foreach(Transform obj in objects_parent.transform)
+        bool level_editor = GameObject.Find("Scripts").GetComponent<Controller>().level_editor;
+
+        foreach (Transform obj in objects_parent.transform)
         {
+            if (level_editor)
+            {
+                string category = Regex.Replace(obj.name, @"(?=.*)\s\d+", "");
+                cards_parent = GameObject.Find(category).transform.GetChild(0).Find("Content").gameObject;
+            }
+
+
             obj.gameObject.SetActive(true);
 
             init_pos = obj.position;
@@ -33,7 +43,7 @@ public class CardsInstantiation : MonoBehaviour
             cell_count = 0;
             cell_x = 0;
             cell_y = 0;
-            foreach(Transform child in obj.transform)
+            foreach (Transform child in obj.transform)
             {
                 if (child.tag != "ObjectCell")
                     continue;
@@ -82,7 +92,17 @@ public class CardsInstantiation : MonoBehaviour
         cam.gameObject.SetActive(false);
         light.SetActive(false);
 
+        if (level_editor)
+        {
+            GameObject[] categories = GameObject.FindGameObjectsWithTag("Category");
+            for (int i = 1; i < categories.Length; i++)
+            {
+                categories[i].SetActive(false);
+            }
+        }
+
     }
+
 
 
 }
