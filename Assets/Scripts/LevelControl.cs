@@ -10,12 +10,15 @@ public class LevelObject
     public string name;
     public Vector3 pos;
     public Quaternion rot;
+    public List<Transform> cells;
 
     public LevelObject(string name, Vector3 pos, Quaternion rot)
     {
         this.name = name;
         this.pos = pos;
         this.rot = rot;
+
+        cells = new List<Transform>();
     }
 }
 
@@ -49,12 +52,14 @@ public class LevelControl : MonoBehaviour
 
         foreach (Transform prefab in prefabs_preview)
         {
-            objs.Add(new LevelObject(prefab.name, prefab.localPosition, prefab.rotation));
+            LevelObject lvl_obj = new LevelObject(prefab.name, prefab.localPosition, prefab.rotation);
 
             foreach (Transform obj_cell in prefab)
             {
                 if (obj_cell.tag != "ObjectCell")
                     continue;
+
+                lvl_obj.cells.Add(obj_cell);
 
                 foreach (Transform grid_cell in GameObject.Find("Furniture Grid").transform)
                 {
@@ -69,6 +74,8 @@ public class LevelControl : MonoBehaviour
                 }
 
             }
+
+            objs.Add(lvl_obj);
         }
 
 
@@ -80,32 +87,87 @@ public class LevelControl : MonoBehaviour
     }
 
 
-    bool ObjectsOverlapping(LevelObject preview_obj)
+    bool CellsOverlapping(LevelObject preview_obj, Transform play_obj)
     {
-        foreach (Transform play_obj in prefabs_play.transform)
+        bool found_match;
+
+        foreach (Transform play_obj_cell in play_obj.transform)  //Check position
         {
-            if (play_obj.name != preview_obj.name)
+            if (play_obj_cell.tag != "ObjectCell")
                 continue;
 
-            if (Vector3.Distance(preview_obj.pos, play_obj.localPosition) <= 0.1f)
+            found_match = false;
+
+            foreach (Transform preview_obj_cell in preview_obj.cells)
             {
-                if (play_obj.CompareTag("Ignore Rotation"))
-                    return true;
-                else if (Mathf.Abs(Quaternion.Dot(preview_obj.rot, play_obj.rotation)) >= 1 - 0.1f)
-                        return true;
+                if (Vector3.Distance(play_obj_cell.position + 40 * Vector3.down, preview_obj_cell.position) <= 0.1f)
+                    found_match = true;
             }
+
+            if (found_match)
+                continue;
+
+
+            //Debug.LogError("Wrong position: " + play_obj.name);
+            return false;
         }
 
-        //Debug.Log(preview_obj.name);
+        return true;
+    }
+
+    bool RotationsMatching(LevelObject preview_obj, Transform play_obj)
+    {
+        if (play_obj.CompareTag("Ignore Rotation")) //Completely ignore rotation
+        {
+            return true;
+        }
+        else if (play_obj.CompareTag("Ignore Rotation Partly"))   //Ignore rotation around y axis for 180deg, eg. a 2x1 table
+        {
+            //float deg_diff = Quaternion.Angle(preview_obj.rot, play_obj.rotation);
+
+            //if (deg_diff == 0 || deg_diff == 180)
+            //    return true;
+
+            if (Mathf.Abs(Quaternion.Dot(preview_obj.rot, play_obj.rotation)) >= 1 - 0.1f)
+                return true;
+
+            if (Mathf.Abs(Quaternion.Dot(preview_obj.rot, play_obj.rotation * Quaternion.Euler(0, 180, 0))) >= 1 - 0.1f)
+                return true;
+
+        }
+        else if (Mathf.Abs(Quaternion.Dot(preview_obj.rot, play_obj.rotation)) >= 1 - 0.1f)
+        {
+            return true;
+        }
+
+        //Debug.LogError("Wrong rotation: " + play_obj.name);
 
         return false;
     }
 
-    public bool LevelIsCompleted()
+
+    bool ObjectPlacedCorrectly(Transform play_obj)
     {
         foreach (LevelObject preview_obj in objs)
         {
-            if (ObjectsOverlapping(preview_obj) == false)
+            if (preview_obj.name != play_obj.name)
+                continue;
+
+            if (CellsOverlapping(preview_obj, play_obj) && RotationsMatching(preview_obj, play_obj))
+                return true;
+        }
+
+
+        Debug.Log(play_obj.name);
+        return false;
+    }
+
+
+    public bool LevelIsCompleted()
+    {
+        foreach (Transform play_obj in prefabs_play.transform)
+        {
+            if (!ObjectPlacedCorrectly(play_obj))
                 return false;
         }
 

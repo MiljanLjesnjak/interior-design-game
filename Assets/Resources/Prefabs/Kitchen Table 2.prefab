@@ -205,7 +205,7 @@ GameObject:
   - component: {fileID: 54032753850128029}
   m_Layer: 0
   m_Name: Kitchen Table 2
-  m_TagString: Untagged
+  m_TagString: Ignore Rotation Partly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -425,7 +425,7 @@ PrefabInstance:
     - target: {fileID: 3881352941208323753, guid: 142716b89610e8743b7d35bf1662f18b,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 1.35
       objectReference: {fileID: 0}
     - target: {fileID: 3881352941208323753, guid: 142716b89610e8743b7d35bf1662f18b,
         type: 3}

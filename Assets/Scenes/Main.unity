@@ -2253,6 +2253,7 @@ MonoBehaviour:
   menu_click_clip: {fileID: 8300000, guid: c27a2d185d03f0d4ea83d839d056e843, type: 3}
   place_clip: {fileID: 8300000, guid: 4fdad36596898ab4980f07a3e78031a3, type: 3}
   card_interact: {fileID: 8300000, guid: dea05b80dee8e0d48870244fca3e9985, type: 3}
+  error_clip: {fileID: 8300000, guid: cca95d4d9ec87d2459b992c8ec84e7a3, type: 3}
   audio_source: {fileID: 1080438103}
 --- !u!4 &1226581435
 Transform:
@@ -3199,7 +3200,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2078889081}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.4, z: 0}
+  m_LocalPosition: {x: 0, y: 0.85, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 414382292}

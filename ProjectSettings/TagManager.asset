@@ -11,6 +11,7 @@ TagManager:
   - Wall Cell
   - Ignore Rotation
   - Category
+  - Ignore Rotation Partly
   layers:
   - Default
   - TransparentFX

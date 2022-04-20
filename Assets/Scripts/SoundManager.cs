@@ -13,6 +13,8 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
+        clip_index = Random.Range(0, music_clip.Length);
+
         if (GameObject.Find("Audio Source") == null)
         {
             audio_source.gameObject.SetActive(true);
@@ -65,7 +67,6 @@ public class SoundManager : MonoBehaviour
     {
         audio_source.PlayOneShot(card_interact);
     }
-
 
 
 
