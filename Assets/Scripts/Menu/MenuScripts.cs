@@ -10,6 +10,12 @@ public class MenuScripts : MonoBehaviour
         SceneManager.LoadScene(index);
     }
 
+    public void PlayClickSound()
+    {
+        GameObject.Find("Sound Manager").GetComponent<SoundManager>().PlayMenuSelect();
+    }
+
+
     public void NextLevel()
     {
         int level_index = PlayerPrefs.GetInt("level_index", 0);

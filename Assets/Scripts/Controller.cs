@@ -25,13 +25,14 @@ public class Controller : MonoBehaviour
     public Transform cards, active_parent;
     public static GameObject selected_card = null;
     public static Vector3 init_card_pos, begin_drag_pos;
+    public static int init_siblingindex = 0;
 
     [Header("Padding and scroll")]
     public GameObject padding_card;   //Empty card
     public ScrollRect scroll;
     public float scroll_speed = 5f;
 
-
+    public SoundManager sound_manager;
 
     private void Start()
     {
@@ -49,12 +50,16 @@ public class Controller : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             if (selected_object)
+            {
                 selected_object.GetComponent<ObjectDrag>().PlaceObject();
-
+                sound_manager.PlayPlaceObject();
+            }
 
             if (selected_card)
+            {
                 selected_card.GetComponent<CardDrag>().DeselectCard();
-
+                sound_manager.PlayCardInteract();
+            }
         }
 
     }
@@ -189,6 +194,8 @@ public class Controller : MonoBehaviour
         selected_object.SetActive(false);
 
         selected_object = null;
+
+        sound_manager.PlayCardInteract();
     }
     //---
 
@@ -223,33 +230,35 @@ public class Controller : MonoBehaviour
 
 
         //Set padding card SiblingIndex (insert padding in correct place)
-        padding_card.transform.SetParent(active_parent);
+        if (level_editor == false)
+        {
+            padding_card.transform.SetParent(active_parent);
 
-        if (cards.childCount == 0 || selected_card.transform.position.x < cards.GetChild(0).position.x)
-        {
-            padding_card.transform.SetParent(cards);
-            padding_card.transform.SetSiblingIndex(0);
-        }
-        else if (selected_card.transform.position.x > cards.GetChild(cards.childCount - 1).position.x)
-        {
-            padding_card.transform.SetParent(cards);
-            padding_card.transform.SetSiblingIndex(cards.childCount - 1);
-        }
-        else
-        {
-            for (int i = 1; i < cards.childCount; i++)
+            if (cards.childCount == 0 || selected_card.transform.position.x < cards.GetChild(0).position.x)
             {
-
-                if (selected_card.transform.position.x > cards.GetChild(i - 1).position.x
-                && selected_card.transform.position.x < cards.GetChild(i).position.x)
+                padding_card.transform.SetParent(cards);
+                padding_card.transform.SetSiblingIndex(0);
+            }
+            else if (selected_card.transform.position.x > cards.GetChild(cards.childCount - 1).position.x)
+            {
+                padding_card.transform.SetParent(cards);
+                padding_card.transform.SetSiblingIndex(cards.childCount - 1);
+            }
+            else
+            {
+                for (int i = 1; i < cards.childCount; i++)
                 {
-                    padding_card.transform.SetParent(cards);
-                    padding_card.transform.SetSiblingIndex(cards.GetChild(i).GetSiblingIndex());
-                    break;
+
+                    if (selected_card.transform.position.x > cards.GetChild(i - 1).position.x
+                    && selected_card.transform.position.x < cards.GetChild(i).position.x)
+                    {
+                        padding_card.transform.SetParent(cards);
+                        padding_card.transform.SetSiblingIndex(cards.GetChild(i).GetSiblingIndex());
+                        break;
+                    }
                 }
             }
         }
-
 
         //Set padding card width
         float width = 300 - 0.35f * selected_card.transform.position.y;
@@ -307,6 +316,8 @@ public class Controller : MonoBehaviour
         selected_object.GetComponent<Animator>().Play("ObjectPlace");
 
         selected_card = null;
+
+        sound_manager.PlayCardInteract();
     }
     //---
 

@@ -101,13 +101,12 @@ public class LevelControl : MonoBehaviour
         return false;
     }
 
-    public bool EndLevel()
+    public bool LevelIsCompleted()
     {
         foreach (LevelObject preview_obj in objs)
         {
             if (ObjectsOverlapping(preview_obj) == false)
                 return false;
-
         }
 
 
@@ -118,7 +117,7 @@ public class LevelControl : MonoBehaviour
     bool levelFinished = false;
     public void RoomPreview()
     {
-        if (EndLevel())
+        if (LevelIsCompleted())
         {
             levelFinished = true;
             Invoke("ShowLevelEndPanel", room_animator.GetCurrentAnimatorStateInfo(0).length);
@@ -130,6 +129,7 @@ public class LevelControl : MonoBehaviour
     public void ShowLevelEndPanel()
     {
         game_end_panel.SetActive(true);
+        GameObject.Find("Sound Manager").GetComponent<SoundManager>().PlayLevelEnd();
     }
 
     public void RoomPreviewEnd()

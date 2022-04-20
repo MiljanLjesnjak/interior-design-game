@@ -9,7 +9,6 @@ public class CardDrag : MonoBehaviour, IPointerDownHandler
     Vector3 init_scale;
     float scale_lerp_duration = 0.15f;
 
-
     private void Start() => init_scale = transform.localScale;
 
     public void OnPointerDown(PointerEventData eventData) => SelectCard(eventData.pointerCurrentRaycast.gameObject);
@@ -21,14 +20,18 @@ public class CardDrag : MonoBehaviour, IPointerDownHandler
         Controller.selected_card = card;
         Controller.init_card_pos = transform.position;
         Controller.begin_drag_pos = Input.mousePosition;
+        Controller.init_siblingindex = card.transform.GetSiblingIndex();
 
         GameObject.Find("Scripts").GetComponent<Controller>().AddCardPadding();
 
-        card.transform.SetParent(controller.active_parent);
-
         controller.scroll.enabled = false;
 
+        card.transform.SetParent(controller.active_parent);
+
+
         StartCoroutine(LerpScale(1f, 1.15f));
+
+        controller.sound_manager.PlayCardInteract();
     }
 
 
@@ -41,14 +44,16 @@ public class CardDrag : MonoBehaviour, IPointerDownHandler
 
         Controller.selected_card.transform.SetParent(controller.cards);
 
+
         controller.RemoveCardPadding();
+
+        controller.scroll.enabled = true;
+
 
         Controller.selected_card = null;
 
         GetComponent<LayoutElement>().ignoreLayout = true;
         GetComponent<LayoutElement>().ignoreLayout = false;
-
-        controller.scroll.enabled = true;
 
         StartCoroutine(LerpScale(1.15f, 1f));
     }
