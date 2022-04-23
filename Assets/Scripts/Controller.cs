@@ -49,6 +49,8 @@ public class Controller : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
+            scroll.enabled = true;
+
             if (selected_object)
             {
                 selected_object.GetComponent<ObjectDrag>().PlaceObject();
@@ -70,8 +72,10 @@ public class Controller : MonoBehaviour
         if (selected_object == null)
             return;
 
+        bool wall_object = Types.Equals(selected_object.GetComponent<ObjectDrag>().GetType(), typeof(WallDrag));
+
         //Rotate wall objects while moving
-        if (Types.Equals(selected_object.GetComponent<ObjectDrag>().GetType(), typeof(WallDrag)))
+        if (wall_object)
         {
             int min = 0;
             for (int i = 1; i < wall_grid.childCount; i++)
@@ -90,7 +94,12 @@ public class Controller : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 1000, placementRaycast))
         {
-            selected_object.transform.position = hit.point - object_drag_offset;
+            Vector3 place_pos = hit.point - object_drag_offset;
+
+            if (!wall_object)
+                place_pos.y = 0;
+
+            selected_object.transform.position = place_pos;
         }
 
         else
