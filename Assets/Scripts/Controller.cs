@@ -11,6 +11,10 @@ using UnityEngine.UI;
 public class Controller : MonoBehaviour
 {
     LayerMask placementRaycast;
+    LayerMask extendedPlacementRaycast; //extended mask for furniture objects (extended floor game object)
+                                        //used for more precise placement (only on MoveObject)
+    LayerMask placeableObjectMask;
+    LayerMask objectCellMask;
 
     Transform wall_grid;
 
@@ -37,6 +41,9 @@ public class Controller : MonoBehaviour
     private void Start()
     {
         placementRaycast = 1 << LayerMask.NameToLayer("Placement Raycast");
+        extendedPlacementRaycast = 1 << LayerMask.NameToLayer("Extended Placement Raycast");
+        placeableObjectMask = 1 << LayerMask.NameToLayer("Placeable");
+        objectCellMask = 1 << LayerMask.NameToLayer("Object Cell");
 
         wall_grid = GetComponent<Grid>().wall_grid.transform;
     }
@@ -91,8 +98,10 @@ public class Controller : MonoBehaviour
         //Move to raycast hit point
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        LayerMask layer_mask = wall_object ? placementRaycast : extendedPlacementRaycast;
 
-        if (Physics.Raycast(ray, out hit, 1000, placementRaycast))
+
+        if (Physics.Raycast(ray, out hit, 1000, layer_mask))
         {
             Vector3 place_pos = hit.point - object_drag_offset;
 
@@ -101,8 +110,7 @@ public class Controller : MonoBehaviour
 
             selected_object.transform.position = place_pos;
         }
-
-        else
+        else if (!Physics.Raycast(ray, out hit, 1000, placeableObjectMask | objectCellMask))
         {
             ObjectToCard();
             return;
@@ -118,7 +126,7 @@ public class Controller : MonoBehaviour
 
             Vector3 offset = Vector3.zero;
 
-            float horizontal_bound, vertical_bound;
+            float horizontal_bound;
 
             if (Equals(selected_object.GetComponent<ObjectDrag>().GetType(), typeof(FurnitureDrag)))
             {

@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 8234562386710756516}
   - component: {fileID: 4003746711135121007}
   - component: {fileID: 54032753850128029}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Shelf 36
   m_TagString: Untagged
   m_Icon: {fileID: 0}

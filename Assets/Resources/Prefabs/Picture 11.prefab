@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 3568624646433515912}
   - component: {fileID: 3568624646433515913}
   - component: {fileID: 3568624646433515914}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Picture 11
   m_TagString: Furniture
   m_Icon: {fileID: 0}

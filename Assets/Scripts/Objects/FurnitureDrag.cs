@@ -19,7 +19,7 @@ public class FurnitureDrag : ObjectDrag
 
     private void Start()
     {
-        placementRaycast = 1 << LayerMask.NameToLayer("Placement Raycast");
+        placementRaycast = 1 << LayerMask.NameToLayer("Extended Placement Raycast");
         cellMask = 1 << LayerMask.NameToLayer("Object Cell");
 
         init_scale = transform.GetChild(transform.childCount - 1).localScale;
@@ -133,6 +133,7 @@ public class FurnitureDrag : ObjectDrag
 
             foreach (Collider col in Physics.OverlapSphere(child.position, 0.25f, cellMask))
             {
+
                 if (col.transform.parent != transform)
                 {
                     transform.position = init_pos;

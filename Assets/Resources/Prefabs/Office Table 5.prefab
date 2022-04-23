@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 4003746711135121007}
   - component: {fileID: 54032753850128029}
   - component: {fileID: 4466143784683338825}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Office Table 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}

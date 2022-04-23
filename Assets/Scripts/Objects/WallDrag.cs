@@ -5,7 +5,7 @@ using UnityEngine;
 public class WallDrag : ObjectDrag
 {
 
-    LayerMask placementRaycast, objectCellMask, gridCellMask, wallGridMask;
+    LayerMask placementRaycast, objectCellMask;
 
     float pos_lerp_duration = 0.15f;
 
@@ -16,7 +16,6 @@ public class WallDrag : ObjectDrag
     {
         placementRaycast = 1 << LayerMask.NameToLayer("Placement Raycast");
         objectCellMask = 1 << LayerMask.NameToLayer("Object Cell");
-        wallGridMask = 1 << LayerMask.NameToLayer("Wall Placement Raycast");
 
         rot1 = new Quaternion(0, 0, 0, 1f);
         rot2 = new Quaternion(0, -0.7f, 0, 0.7f);
@@ -122,6 +121,7 @@ public class WallDrag : ObjectDrag
 
             foreach (Collider col in Physics.OverlapSphere(child.position, 0.25f, objectCellMask))
             {
+
                 if (col.transform.parent != transform)
                 {
                     transform.position = init_pos;
