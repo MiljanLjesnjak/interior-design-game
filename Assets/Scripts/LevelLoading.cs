@@ -9,7 +9,11 @@ public class LevelLoading : MonoBehaviour
 
     private void Awake()
     {
+        InstantiatePlaceables();
+    }
 
+    public void InstantiatePlaceables()
+    {
         string[] all_levels = ((TextAsset)Resources.Load("_levels")).text.Split('\n');
 
 
@@ -70,6 +74,7 @@ public class LevelLoading : MonoBehaviour
 
 
     }
+
 
 
 }

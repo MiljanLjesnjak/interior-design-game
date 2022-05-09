@@ -17,6 +17,12 @@ public class CardsInstantiation : MonoBehaviour
 
     void Start()
     {
+        InstantiateCards();
+    }
+
+
+    public void InstantiateCards()
+    {
         RenderTexture render_tex;
         Texture2D ss;
         Vector3 init_pos;
@@ -100,7 +106,6 @@ public class CardsInstantiation : MonoBehaviour
                 categories[i].SetActive(false);
             }
         }
-
     }
 
 

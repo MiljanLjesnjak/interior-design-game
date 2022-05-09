@@ -297,12 +297,12 @@ public class Controller : MonoBehaviour
 
     void CardToObject(RaycastHit hit)
     {
-        //GameObject prefab = prefabs.Find(selected_card.name).gameObject;
         GameObject placeable = null;
         foreach (Transform p in placeables)
         {
             if (p.name == selected_card.name && !p.gameObject.activeSelf)
             {
+
                 if (!level_editor)
                     placeable = p.gameObject;
                 else
@@ -319,8 +319,6 @@ public class Controller : MonoBehaviour
             selected_card.GetComponent<Animator>().Play("CloseAnim");
         else
             selected_card.GetComponent<CardDrag>().DeselectCard();
-
-        //selected_card.SetActive(false);
 
         placeable.SetActive(true);
 

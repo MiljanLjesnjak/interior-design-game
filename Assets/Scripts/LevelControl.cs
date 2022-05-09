@@ -45,6 +45,29 @@ public class LevelControl : MonoBehaviour
         //Screen.SetResolution(960, 1973, true);   
     }
 
+    public void ResetLevel()
+    {
+        foreach (Transform placeable in prefabs_play)
+        {
+            placeable.gameObject.SetActive(false);
+            placeable.localPosition = Vector3.zero;
+        }
+
+        Transform active_cards = GameObject.Find("Viewport").transform; //placed objects, children of "Active", not active as a gameobject
+        Transform card;
+        int n = active_cards.GetChild(0).childCount;
+
+        for (int i = 0; i < n; i++)
+        {
+            card = active_cards.GetChild(0).GetChild(0);
+
+            card.gameObject.SetActive(true);
+            card.parent = active_cards.GetChild(1);
+            card.GetComponent<Animator>().Play("OpenAnim");
+        }
+
+    }
+
     public void StartLevel()
     {
         canvas.GetComponent<Animator>().Play("Start Level Canvas");
