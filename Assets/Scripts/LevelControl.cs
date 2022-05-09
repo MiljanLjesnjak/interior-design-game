@@ -37,6 +37,8 @@ public class LevelControl : MonoBehaviour
 
     [SerializeField] Transform canvas;
 
+    List<Transform> grid_cells;
+
     private void Awake()
     {
         room_animator = Camera.main.gameObject.GetComponent<Animator>();
@@ -51,6 +53,14 @@ public class LevelControl : MonoBehaviour
         {
             placeable.gameObject.SetActive(false);
             placeable.localPosition = Vector3.zero;
+
+            foreach (Collider col in placeable.GetComponents<Collider>())
+                col.enabled = true;
+
+            foreach(Transform cell in grid_cells)
+            {
+                cell.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+            }
         }
 
         Transform active_cards = GameObject.Find("Viewport").transform; //placed objects, children of "Active", not active as a gameobject
@@ -73,6 +83,7 @@ public class LevelControl : MonoBehaviour
         canvas.GetComponent<Animator>().Play("Start Level Canvas");
         //play_button.GetComponent<Animator>().Play("ButtonPush");
 
+        grid_cells = new List<Transform>();
         foreach (Transform prefab in prefabs_preview)
         {
             LevelObject lvl_obj = new LevelObject(prefab.name, prefab.localPosition, prefab.rotation);
@@ -87,13 +98,19 @@ public class LevelControl : MonoBehaviour
                 foreach (Transform grid_cell in GameObject.Find("Furniture Grid").transform)
                 {
                     if (Vector3.Distance(obj_cell.position, grid_cell.position + Vector3.down * grid.parent.position.y) < 0.1f)
+                    {
                         grid_cell.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+                        grid_cells.Add(grid_cell);
+                    }
                 }
 
                 foreach (Transform grid_cell in GameObject.Find("Wall Grid").transform)
                 {
                     if (Vector3.Distance(obj_cell.position, grid_cell.position + Vector3.down * grid.parent.position.y) < 0.1f)
+                    {
                         grid_cell.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+                        grid_cells.Add(grid_cell);
+                    }
                 }
 
             }
@@ -185,19 +202,6 @@ public class LevelControl : MonoBehaviour
         return false;
     }
 
-
-    public bool LevelIsCompleted()
-    {
-        foreach (Transform play_obj in prefabs_play.transform)
-        {
-            if (!ObjectPlacedCorrectly(play_obj))
-                return false;
-        }
-
-
-        return true;
-    }
-
     [SerializeField] Animator preview_button_animator;
     public void RoomPreview()
     {
@@ -206,26 +210,58 @@ public class LevelControl : MonoBehaviour
         if (!preview_status)
         {
             preview_button_animator.Play("arrow-rotate-preview-start");
-            RoomPreviewStart();
+            room_animator.SetBool("Preview", true);
         }
         else
         {
             preview_button_animator.Play("arrow-rotate-preview-end");
-            RoomPreviewEnd();
+            room_animator.SetBool("Preview", false);
         }
 
     }
 
-    bool levelFinished = false;
-    public void RoomPreviewStart()
+    void LevelIsCompleted()
     {
-        if (LevelIsCompleted())
+        foreach (Transform play_obj in prefabs_play.transform)
         {
-            levelFinished = true;
-            Invoke("ShowLevelEndPanel", room_animator.GetCurrentAnimatorStateInfo(0).length);
+            if (!ObjectPlacedCorrectly(play_obj))
+                return;
         }
 
-        room_animator.SetBool("Preview", true);
+        ShowLevelEndPanel();
+    }
+
+
+    public IEnumerator ObjectPlacedCoroutine(GameObject placed_obj)
+    {
+        yield return new WaitForSeconds(0.175f);    //0.2f because of position lerping when object gets placed (0.15f duration)
+
+
+        if (ObjectPlacedCorrectly(placed_obj.transform))
+        {
+            foreach (Collider col in placed_obj.GetComponents<Collider>())  //Disable colliders so object can't be moved anymore
+            {
+                col.enabled = false;
+            }
+
+            foreach (Transform obj_cell in placed_obj.transform)
+            {
+                if (obj_cell.tag != "ObjectCell")
+                    continue;
+
+                foreach (Transform cell in grid_cells) //Hide grid for correct objects
+                {
+                    if (Vector3.Distance(obj_cell.position, cell.position) < 0.1f)
+                    {
+                        cell.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+                    }
+                }
+            }
+
+
+        }
+
+        LevelIsCompleted();
     }
 
     public void ShowLevelEndPanel()
@@ -234,13 +270,6 @@ public class LevelControl : MonoBehaviour
         GameObject.Find("Sound Manager").GetComponent<SoundManager>().PlayLevelEnd();
     }
 
-    public void RoomPreviewEnd()
-    {
-        if (levelFinished)
-            return;
-
-        room_animator.SetBool("Preview", false);
-    }
 
 
 

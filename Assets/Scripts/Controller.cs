@@ -38,6 +38,8 @@ public class Controller : MonoBehaviour
 
     public SoundManager sound_manager;
 
+    LevelControl level_control;
+
     private void Start()
     {
         placementRaycast = 1 << LayerMask.NameToLayer("Placement Raycast");
@@ -46,6 +48,8 @@ public class Controller : MonoBehaviour
         objectCellMask = 1 << LayerMask.NameToLayer("Object Cell");
 
         wall_grid = GetComponent<Grid>().wall_grid.transform;
+
+        level_control = GameObject.Find("Scripts").GetComponent<LevelControl>();
     }
 
     //Input
@@ -60,6 +64,8 @@ public class Controller : MonoBehaviour
 
             if (selected_object)
             {
+                level_control.StartCoroutine(level_control.ObjectPlacedCoroutine(selected_object));
+
                 selected_object.GetComponent<ObjectDrag>().PlaceObject();
                 sound_manager.PlayPlaceObject();
             }
