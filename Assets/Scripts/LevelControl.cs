@@ -181,7 +181,7 @@ public class LevelControl : MonoBehaviour
         }
 
 
-        Debug.Log(play_obj.name);
+        //Debug.Log(play_obj.name);
         return false;
     }
 
@@ -198,9 +198,26 @@ public class LevelControl : MonoBehaviour
         return true;
     }
 
+    [SerializeField] Animator preview_button_animator;
+    public void RoomPreview()
+    {
+        bool preview_status = room_animator.GetBool("Preview");
+
+        if (!preview_status)
+        {
+            preview_button_animator.Play("arrow-rotate-preview-start");
+            RoomPreviewStart();
+        }
+        else
+        {
+            preview_button_animator.Play("arrow-rotate-preview-end");
+            RoomPreviewEnd();
+        }
+
+    }
 
     bool levelFinished = false;
-    public void RoomPreview()
+    public void RoomPreviewStart()
     {
         if (LevelIsCompleted())
         {

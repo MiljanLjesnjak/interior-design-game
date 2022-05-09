@@ -37,9 +37,14 @@ public class MenuScripts : MonoBehaviour
         GameObject.Find("Scripts").GetComponent<LevelControl>().ResetLevel();
     }
 
-    public void RoomPreviewStart()
+    public void RoomPreview()
     {
         GameObject.Find("Scripts").GetComponent<LevelControl>().RoomPreview();
+    }
+
+    public void RoomPreviewStart()
+    {
+        GameObject.Find("Scripts").GetComponent<LevelControl>().RoomPreviewStart();
     }
 
     public void RoomPreviewEnd()
