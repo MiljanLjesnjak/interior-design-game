@@ -28,7 +28,7 @@ public class LevelSaving : MonoBehaviour
 
         File.AppendAllText("Assets/Resources/_levels.txt", parsed_data);
 
-        GameObject.Find("UI Scripts").GetComponent<MenuScripts>().RestartLevel();
+        GameObject.Find("UI Scripts").GetComponent<MenuScripts>().ReloadScene();
     }
 
 }

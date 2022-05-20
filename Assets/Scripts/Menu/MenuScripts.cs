@@ -32,9 +32,13 @@ public class MenuScripts : MonoBehaviour
 
     public void RestartLevel()
     {
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
         GameObject.Find("Scripts").GetComponent<LevelControl>().ResetLevel();
+    }
+
+    public void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void RoomPreview()

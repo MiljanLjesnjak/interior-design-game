@@ -64,7 +64,8 @@ public class Controller : MonoBehaviour
 
             if (selected_object)
             {
-                level_control.StartCoroutine(level_control.ObjectPlacedCoroutine(selected_object));
+                if (!level_editor)
+                    level_control.StartCoroutine(level_control.ObjectPlacedCoroutine(selected_object));
 
                 selected_object.GetComponent<ObjectDrag>().PlaceObject();
                 sound_manager.PlayPlaceObject();
