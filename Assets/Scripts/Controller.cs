@@ -52,6 +52,7 @@ public class Controller : MonoBehaviour
         level_control = GameObject.Find("Scripts").GetComponent<LevelControl>();
     }
 
+
     //Input
     private void Update()
     {
@@ -230,8 +231,10 @@ public class Controller : MonoBehaviour
         if (selected_card == null)
             return;
 
+
         //Move card
         selected_card.transform.position = init_card_pos + Input.mousePosition - begin_drag_pos;
+
 
 
         //Scroll rect manually if card is dragged to either side
@@ -301,6 +304,8 @@ public class Controller : MonoBehaviour
             CardToObject(hit);
         }
     }
+
+
 
     void CardToObject(RaycastHit hit)
     {
