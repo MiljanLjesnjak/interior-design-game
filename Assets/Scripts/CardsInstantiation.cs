@@ -23,6 +23,7 @@ public class CardsInstantiation : MonoBehaviour
     public void EnableCardContainer()
     {
         cards_parent.SetActive(true);
+        cards_parent.transform.parent.parent.Find("Scrollbar Horizontal").GetChild(0).GetChild(0).GetComponent<Image>().enabled = true;
     }
 
     public void InstantiateCards()

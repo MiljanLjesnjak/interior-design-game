@@ -7,9 +7,21 @@ public class LevelLoading : MonoBehaviour
 {
     [SerializeField] Transform prefabs_play, prefabs_preview;
 
+    [SerializeField] Material wall_mat, floor_mat;
+    string[] colors = {"#d7e4e0", "#c2dbd4", "#acd2c7", "#ced9c3", "#bac9ac", "#ccbfc7", "#d3c5c9", "#e6d5cf", "#ffebd6"};
+
     private void Awake()
     {
+        SetColors();
         InstantiatePlaceables();
+    }
+
+    void SetColors()
+    {
+        Color rand_col;
+        ColorUtility.TryParseHtmlString(colors[Random.Range(0, colors.Length)], out rand_col);
+
+        wall_mat.color = rand_col;
     }
 
     public void InstantiatePlaceables()

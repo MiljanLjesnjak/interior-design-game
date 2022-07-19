@@ -1174,7 +1174,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 0.92102706, b: 0.740566, a: 1}
   m_Intensity: 25
-  m_Range: 10
+  m_Range: 15
   m_SpotAngle: 179
   m_InnerSpotAngle: 90
   m_CookieSize: 10
@@ -1853,6 +1853,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabs_play: {fileID: 948259350}
   prefabs_preview: {fileID: 925714617}
+  wall_mat: {fileID: 2100000, guid: 68d46847ef4fa184ca4c5be18d62a245, type: 2}
+  floor_mat: {fileID: 2100000, guid: 87c9eec84aba15f459b1c82e490ea9ed, type: 2}
 --- !u!1 &1041498608
 GameObject:
   m_ObjectHideFlags: 0
@@ -1898,7 +1900,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 0.92102706, b: 0.740566, a: 1}
   m_Intensity: 25
-  m_Range: 10
+  m_Range: 15
   m_SpotAngle: 179
   m_InnerSpotAngle: 90
   m_CookieSize: 10
@@ -3068,7 +3070,12 @@ PrefabInstance:
     - target: {fileID: 8072201486027828420, guid: 1ab9b86959c70da4b9aff51f2a4759f5,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000031154017
+      value: 0.0000076293945
+      objectReference: {fileID: 0}
+    - target: {fileID: 8072201486027828420, guid: 1ab9b86959c70da4b9aff51f2a4759f5,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 8072201486027828423, guid: 1ab9b86959c70da4b9aff51f2a4759f5,
         type: 3}
@@ -3083,6 +3090,11 @@ PrefabInstance:
     - target: {fileID: 8072201486139587195, guid: 1ab9b86959c70da4b9aff51f2a4759f5,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8072201486139587195, guid: 1ab9b86959c70da4b9aff51f2a4759f5,
+        type: 3}
+      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8072201486226536708, guid: 1ab9b86959c70da4b9aff51f2a4759f5,

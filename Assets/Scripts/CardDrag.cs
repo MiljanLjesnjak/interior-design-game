@@ -79,6 +79,5 @@ public class CardDrag : MonoBehaviour, IPointerDownHandler
         transform.localScale = init_scale * endModifier;
     }
 
-
-
+  
 }

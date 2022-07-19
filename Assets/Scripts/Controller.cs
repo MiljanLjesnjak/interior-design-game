@@ -20,13 +20,16 @@ public class Controller : MonoBehaviour
 
     public bool level_editor = false;
 
+    private float screen_width, screen_height;
+
     [Header("Placeables")]
     public Transform placeables;
     public static GameObject selected_object = null;
     public static Vector3 object_drag_offset;
 
     [Header("Cards")]
-    public Transform cards, active_parent;
+    public Transform cards;
+    public Transform active_parent;
     public static GameObject selected_card = null;
     public static Vector3 init_card_pos, begin_drag_pos;
     public static int init_siblingindex = 0;
@@ -42,6 +45,9 @@ public class Controller : MonoBehaviour
 
     private void Start()
     {
+        screen_width = Screen.width;
+        screen_height = Screen.height;
+
         placementRaycast = 1 << LayerMask.NameToLayer("Placement Raycast");
         extendedPlacementRaycast = 1 << LayerMask.NameToLayer("Extended Placement Raycast");
         placeableObjectMask = 1 << LayerMask.NameToLayer("Placeable");
@@ -236,24 +242,23 @@ public class Controller : MonoBehaviour
         selected_card.transform.position = init_card_pos + Input.mousePosition - begin_drag_pos;
 
 
-
         //Scroll rect manually if card is dragged to either side
-        if (selected_card.transform.localPosition.x <= -200f && scroll.horizontalNormalizedPosition >= 0)
-        {
-            scroll.horizontalNormalizedPosition -= Time.deltaTime * scroll_speed / -200f * selected_card.transform.localPosition.x;
+        //if (selected_card.transform.position.x / screen_width <= 0.2f && scroll.horizontalNormalizedPosition >= 0)
+        //{
+        //    scroll.horizontalNormalizedPosition -= Time.deltaTime * scroll_speed;
 
-            padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(-50, 185);
-            LayoutRebuilder.MarkLayoutForRebuild(cards.GetComponent<RectTransform>());
-            return;
-        }
-        else if (selected_card.transform.localPosition.x >= 200f && scroll.horizontalNormalizedPosition <= 1)
-        {
-            scroll.horizontalNormalizedPosition += Time.deltaTime * scroll_speed / 200f * selected_card.transform.localPosition.x;
+        //    padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(-50, 185);
+        //    LayoutRebuilder.MarkLayoutForRebuild(cards.GetComponent<RectTransform>());
+        //    return;
+        //}
+        //else if (selected_card.transform.position.x / screen_width >= 0.8f && scroll.horizontalNormalizedPosition <= 1)
+        //{
+        //    scroll.horizontalNormalizedPosition += Time.deltaTime * scroll_speed;
 
-            padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(-50, 185);
-            LayoutRebuilder.MarkLayoutForRebuild(cards.GetComponent<RectTransform>());
-            return;
-        }
+        //    padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(-50, 185);
+        //    LayoutRebuilder.MarkLayoutForRebuild(cards.GetComponent<RectTransform>());
+        //    return;
+        //}
 
 
         //Set padding card SiblingIndex (insert padding in correct place)
@@ -288,12 +293,12 @@ public class Controller : MonoBehaviour
         }
 
         //Set padding card width
-        float width = 300 - 0.35f * selected_card.transform.position.y;
-        width = Mathf.Clamp(width, -50, 125); //-50 because spacing in layout is 
+        float width = 0.07f * screen_height - selected_card.transform.localPosition.y;
+        width = Mathf.Clamp(width, -25, 125); //-25 because spacing in layout is -25
         padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(width, 185);
 
-
         LayoutRebuilder.MarkLayoutForRebuild(cards.GetComponent<RectTransform>());
+
 
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
