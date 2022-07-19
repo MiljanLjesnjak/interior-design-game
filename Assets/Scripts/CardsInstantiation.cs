@@ -20,6 +20,10 @@ public class CardsInstantiation : MonoBehaviour
         InstantiateCards();
     }
 
+    public void EnableCardContainer()
+    {
+        cards_parent.SetActive(true);
+    }
 
     public void InstantiateCards()
     {
@@ -95,6 +99,8 @@ public class CardsInstantiation : MonoBehaviour
             obj.gameObject.SetActive(false);
         }
 
+        cards_parent.SetActive(false);   //It gets enabled later in canvas animation
+       
         cam.gameObject.SetActive(false);
         light.SetActive(false);
 

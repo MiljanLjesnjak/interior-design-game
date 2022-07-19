@@ -56,16 +56,19 @@ public class LevelSaving : MonoBehaviour
         parsed_data = parsed_data.Substring(0, parsed_data.Length - 1);
         parsed_data += "\n";
 
-        string path = Application.persistentDataPath + "/level_data";
-        SafeCreateDirectory(path);
+        //string path = Application.persistentDataPath + "/level_data";
+        //SafeCreateDirectory(path);
+
+        string path = "Assets/Resources/_levels.txt";
+        File.AppendAllText(path, parsed_data);
 
 
-        Debug.LogError(path);
+        //Debug.LogError(path);
 
-        StreamWriter Writer = new StreamWriter(path + "/_levels.txt", append: true);
-        Writer.Write(parsed_data);
-        Writer.Flush();
-        Writer.Close();
+        //StreamWriter Writer = new StreamWriter(path + "/_levels.txt", append: true);
+        //Writer.Write(parsed_data);
+        //Writer.Flush();
+        //Writer.Close();
 
         GameObject.Find("UI Scripts").GetComponent<MenuScripts>().ReloadScene();
     }

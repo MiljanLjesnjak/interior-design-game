@@ -75,7 +75,7 @@ public class Controller : MonoBehaviour
             if (selected_card)
             {
                 selected_card.GetComponent<CardDrag>().DeselectCard();
-                sound_manager.PlayCardInteract();
+                //sound_manager.PlayCardInteract();
             }
         }
 
@@ -352,13 +352,13 @@ public class Controller : MonoBehaviour
     public void AddCardPadding()
     {
         padding_card.transform.SetSiblingIndex(selected_card.transform.GetSiblingIndex());
-        padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(125f, 185);
+        padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(125/2, 185);
     }
 
     public void RemoveCardPadding()
     {
         selected_card.transform.SetSiblingIndex(padding_card.transform.GetSiblingIndex());
-        padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(-50, 185);
+        padding_card.GetComponent<RectTransform>().sizeDelta = new Vector2(-50/2, 185);
     }
 
 

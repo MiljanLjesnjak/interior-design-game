@@ -31,7 +31,7 @@ public class CardDrag : MonoBehaviour, IPointerDownHandler
 
         StartCoroutine(LerpScale(1f, 1.15f));
 
-        controller.sound_manager.PlayCardInteract();
+        //controller.sound_manager.PlayCardInteract();
     }
 
 

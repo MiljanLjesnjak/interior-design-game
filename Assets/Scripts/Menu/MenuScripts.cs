@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class MenuScripts : MonoBehaviour
 {
+    public void EnableCardContainer()
+    {
+        GameObject.Find("Scripts").GetComponent<CardsInstantiation>().EnableCardContainer();
+    }
     public void ChangeScene(int index)
     {
         SceneManager.LoadScene(index);

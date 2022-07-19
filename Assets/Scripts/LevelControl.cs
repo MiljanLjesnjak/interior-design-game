@@ -43,7 +43,7 @@ public class LevelControl : MonoBehaviour
     {
         room_animator = Camera.main.gameObject.GetComponent<Animator>();
 
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 120;
         //Screen.SetResolution(960, 1973, true);   
     }
 
@@ -81,7 +81,7 @@ public class LevelControl : MonoBehaviour
     public void StartLevel()
     {
         canvas.GetComponent<Animator>().Play("Start Level Canvas");
-        //play_button.GetComponent<Animator>().Play("ButtonPush");
+
 
         grid_cells = new List<Transform>();
         foreach (Transform prefab in prefabs_preview)
@@ -235,7 +235,6 @@ public class LevelControl : MonoBehaviour
     public IEnumerator ObjectPlacedCoroutine(GameObject placed_obj)
     {
         yield return new WaitForSeconds(0.175f);    //0.2f because of position lerping when object gets placed (0.15f duration)
-
 
         if (ObjectPlacedCorrectly(placed_obj.transform))
         {
