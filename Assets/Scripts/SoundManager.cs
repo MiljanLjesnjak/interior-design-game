@@ -26,18 +26,23 @@ public class SoundManager : MonoBehaviour
         {
             audio_source = GameObject.Find("Audio Source").GetComponent<AudioSource>();
         }
-       
-
     }
+
 
     public void StartMusic()
     {
+        if (SettingsScript.music_mute)
+            return;
+
         audio_source.clip = music_clip[clip_index];
         audio_source.Play();
     }
 
     private void Update()
     {
+        if (SettingsScript.music_mute)
+            return;
+
         if (!audio_source.isPlaying)
         {
             if (++clip_index > music_clip.Length - 1)
@@ -48,24 +53,32 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void StopMusic() => audio_source.Stop();
+
+
+
     public void PlayLevelEnd()
     {
-        audio_source.PlayOneShot(end_clip);
+        if(!SettingsScript.sound_mute)
+            audio_source.PlayOneShot(end_clip);
     }
 
     public void PlayMenuSelect()
     {
-        audio_source.PlayOneShot(menu_click_clip);
+        if (!SettingsScript.sound_mute)
+            audio_source.PlayOneShot(menu_click_clip);
     }
 
     public void PlayPlaceObject()
     {
-        audio_source.PlayOneShot(place_clip);
+        if (!SettingsScript.sound_mute)
+            audio_source.PlayOneShot(place_clip);
     }
 
     public void PlayCardInteract()
     {
-        audio_source.PlayOneShot(card_interact);
+        if (!SettingsScript.sound_mute)
+            audio_source.PlayOneShot(card_interact);
     }
 
 

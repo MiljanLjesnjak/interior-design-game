@@ -206,6 +206,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2746494}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &91026162 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 537532519087220502, guid: 1ab9b86959c70da4b9aff51f2a4759f5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1989872424}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &172832137
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,7 +792,7 @@ MonoBehaviour:
   room: {fileID: 1247792394}
   prefabs_play: {fileID: 948259350}
   prefabs_preview: {fileID: 925714617}
-  game_end_panel: {fileID: 1989872425}
+  game_end_panel: {fileID: 91026162}
   grid: {fileID: 203465532}
   canvas: {fileID: 1362270774}
   preview_button_animator: {fileID: 2039547775}
@@ -3170,12 +3176,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ab9b86959c70da4b9aff51f2a4759f5, type: 3}
---- !u!1 &1989872425 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2249568107104973564, guid: 1ab9b86959c70da4b9aff51f2a4759f5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1989872424}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2032029223
 GameObject:
   m_ObjectHideFlags: 0
