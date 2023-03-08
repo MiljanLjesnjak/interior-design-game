@@ -35,7 +35,7 @@ public class LevelSaving : MonoBehaviour
     //Android
     public static DirectoryInfo SafeCreateDirectory(string path)
     {
-        //Generate if you don't check if the directory exists
+        //Don't generate if the directory exists
         if (Directory.Exists(path))
         {
             return null;

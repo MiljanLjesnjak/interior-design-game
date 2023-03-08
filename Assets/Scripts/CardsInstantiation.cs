@@ -45,7 +45,7 @@ public class CardsInstantiation : MonoBehaviour
                 cards_parent = GameObject.Find(category).transform.GetChild(0).Find("Content").gameObject;
             }
 
-
+            //Set object position and rotation
             obj.gameObject.SetActive(true);
 
             init_pos = obj.position;
@@ -66,6 +66,10 @@ public class CardsInstantiation : MonoBehaviour
 
             obj.position = photo_shoot.position + new Vector3(-cell_x / cell_count, -cell_y / cell_count, 0);
             obj.rotation = Quaternion.Euler(0, 0, 0);
+
+            //Set camera ortho size based on object width
+            cam.orthographicSize = (cell_x >= 8) ? 2.5f : 2;
+
 
             //Render to the render texture
             render_tex = new RenderTexture(512, 512, 8);

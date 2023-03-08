@@ -5,9 +5,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-//KARTICE KAD GLEDA KOLIKO PADDING DA STAVI I OSTALE KALKULACIJE ZA UI ZAVISE OD REZOLUCIJE!!!! POPRAVI
-//I ONDA PONOVO UKLJUCI TARGET DPI??
-
 public class Controller : MonoBehaviour
 {
     LayerMask placementRaycast;
@@ -319,7 +316,6 @@ public class Controller : MonoBehaviour
         {
             if (p.name == selected_card.name && !p.gameObject.activeSelf)
             {
-
                 if (!level_editor)
                     placeable = p.gameObject;
                 else
