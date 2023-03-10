@@ -43,7 +43,7 @@ public class LevelControl : MonoBehaviour
     {
         room_animator = Camera.main.gameObject.GetComponent<Animator>();
 
-        Application.targetFrameRate = 120;
+        //Application.targetFrameRate = 120;
         //Screen.SetResolution(960, 1973, true);   
     }
 
